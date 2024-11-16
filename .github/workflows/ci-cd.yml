@@ -11,8 +11,7 @@ on:
         description: 'Network URL for contract deployment'
         required: true
         type: string
-        default: 'https://ganache.ajripa.click'
-
+        default: 'https://ganache.ajripa.click' # This services is deployed in our K8S cluster
 jobs:
   deploy-contracts:
     name: Deploy Contracts
@@ -103,7 +102,7 @@ jobs:
 
       - name: Create tag based on the current timestamp
         id: tag-timestamp
-        run: echo "IMAGE_TAG=$(date +'%Y-%m-%d-%H-%M')"
+        run: echo "timestamp=$(date +'%Y-%m-%d-%H-%M')"
 
       - name: Build, tag, and push Docker image to Amazon ECR
         id: build-push
