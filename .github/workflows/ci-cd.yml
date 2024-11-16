@@ -59,9 +59,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-contracts
     outputs:
-      image_tag: ${{ env.IMAGE_TAG }}
-      full_image: ${{ steps.build-push.outputs.full_image }}
-
+      registry: ${{ steps.login-ecr.outputs.registry }}
+      repo_name: ${{ steps.build-push.outputs.full_image }}
+      image_tag: ${{ steps.tag-timestamp.outputs.image_tag }}
 
     steps:
       - name: Checkout
@@ -86,17 +86,24 @@ jobs:
           aws-region: eu-west-1
 
       - name: Prepare ECR repository name based on the Github repository
+        id: prepare-ecr
         shell: bash
         run: |
           set -eux
-          # lowercase the name
-          repo="${GITHUB_REPOSITORY,,}"
+          # lowercase the name and remove the owner
+          repo="${GITHUB_REPOSITORY#*/}"
 
           # replace / with _
-          echo "REPO_NAME=${repo//\//_}" >> $GITHUB_ENV
+          echo "repo_name=${repo//\//_}" >> $GITHUB_OUTPUT
+
+      - name: Create tag based on the current timestamp
+        id: tag-timestamp
+        run: echo "image_tag=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_OUTPUT
 
       - name: Create ECR repository if it doesn't exist
         shell: bash
+        env:
+          REPO_NAME: ${{ steps.prepare-ecr.outputs.repo_name }}
         run: |
           set -eux
           if ! aws ecr describe-repositories --repository-names "$REPO_NAME" > /dev/null 2>&1; then
@@ -110,20 +117,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Create tag based on the current timestamp
-        id: tag-timestamp
-        run: echo "IMAGE_TAG=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_ENV
-
       - name: Build, tag, and push Docker image to Amazon ECR
         id: build-push
         shell: bash
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.tag-timestamp.outputs.image_tag }}
+          REPO_NAME: ${{ steps.prepare-ecr.outputs.repo_name }}
         run: |
           docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG
           echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$REPO_NAME"
-          echo "FULL_IMAGE=$ECR_REGISTRY/$REPO_NAME" >> $GITHUB_OUTPUT
 
   update-helm-chart:
       name: Update Helm Chart
@@ -140,7 +144,7 @@ jobs:
           run: |
             cd chart/${{ inputs.helm_chart_name }}
             # Update image repository
-            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.full_image }}|g" values-tfg.yaml
+            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.registry }}/${{ needs.build-and-push.outputs.repo_name }}|g" values-tfg.yaml
             # Update image tag
             sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
             # Update live url
