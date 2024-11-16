@@ -52,6 +52,9 @@ jobs:
     name: Build and Push Docker image
     runs-on: ubuntu-latest
     needs: deploy-contracts
+    outputs:
+      image_tag: ${{ steps.tag-timestamp.outputs.timestamp }}
+      repo_name: ${{ env.REPO_NAME }}
 
     steps:
       - name: Checkout
@@ -127,9 +130,9 @@ jobs:
 
         - name: Update values-tfg.yaml
           run: |
-            cd chart/$REPO_NAME
+            cd chart/${{ needs.build-and-push.outputs.repo_name }}
             # Update image tag
-            sed -i "s|tag: .*|tag: $IMAGE_TAG|g" values-tfg.yaml
+            sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
             # Update live url
             sed -i "s|liveUrl: .*|liveUrl: ${{ inputs.network_url }}|g" values-tfg.yaml
 
@@ -140,6 +143,6 @@ jobs:
           run: |
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
-            git add chart/values-tfg.yaml
-            git commit -m "chore: image tag $IMAGE_TAG and network url ${{ inputs.network_url }}"
+            git add chart/${{ needs.build-and-push.outputs.repo_name }}/values-tfg.yaml
+            git commit -m "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
             git push
