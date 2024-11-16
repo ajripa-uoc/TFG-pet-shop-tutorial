@@ -90,11 +90,14 @@ jobs:
         shell: bash
         run: |
           set -eux
-          # lowercase the name and remove the owner
-          repo="${GITHUB_REPOSITORY#*/}"
+          # remove the owner
+          repo_name="${GITHUB_REPOSITORY#*/}"
+
+          # convert to lowercase
+          repo_name="${repo_name,,}"
 
           # replace / with _
-          echo "repo_name=${repo//\//_}" >> $GITHUB_OUTPUT
+          echo "repo_name=${repo_name//\//_}" >> $GITHUB_OUTPUT
 
       - name: Create tag based on the current timestamp
         id: tag-timestamp
