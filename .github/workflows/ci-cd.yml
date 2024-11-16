@@ -102,19 +102,17 @@ jobs:
 
       - name: Create tag based on the current timestamp
         id: tag-timestamp
-        run: echo "timestamp=$(date +'%Y-%m-%d-%H-%M')"
+        run: echo "IMAGE_TAG=$(date +'%Y-%m-%d-%H-%M')" >> $GITHUB_ENV
 
       - name: Build, tag, and push Docker image to Amazon ECR
         id: build-push
         shell: bash
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
-          IMAGE_TAG: ${{ steps.tag-timestamp.outputs.timestamp }}
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$ECR_REPOSITORY"
+          docker build -t $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
+          echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$ECR_REPO_NAME"
           echo "image_tag=$IMAGE_TAG"
           echo "full_image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
@@ -131,9 +129,9 @@ jobs:
           run: |
             cd chart
             # Update image tag
-            sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
+            sed -i "s|tag: .*|tag: $IMAGE_TAG|g" values-tfg.yaml
             # Update live url
-            sed -i "s|liveUrl: .*|liveUrl: ${{ needs.deploy-contracts.outputs.LIVE_URL }}|g" values-tfg.yaml
+            sed -i "s|liveUrl: .*|liveUrl: ${{ inputs.network_url }}|g" values-tfg.yaml
 
             # Verify changes
             cat values-tfg.yaml
@@ -143,5 +141,5 @@ jobs:
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
             git add chart/values-tfg.yaml
-            git commit -m "chore: update image tag to ${{ needs.build-and-push.outputs.image_tag }}"
+            git commit -m "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
             git push
