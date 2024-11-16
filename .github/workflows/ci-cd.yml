@@ -55,7 +55,7 @@ jobs:
           retention-days: 1
 
   build-and-push:
-    name: Build and Push Docker image
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
     needs: deploy-contracts
     outputs:
