@@ -1,1 +1,1 @@
-window.GANACHE_URL = "http://localhost:90000";
+window.GANACHE_URL = "http://localhost:8545";

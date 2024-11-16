@@ -1,13 +1,32 @@
 services:
-  web:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - 3000:3000
-    depends_on:
-      - ganache
   ganache:
     image: trufflesuite/ganache
     ports:
       - 8545:8545
+
+  truffle-migrate:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM node:16-alpine
+        WORKDIR /app
+        RUN apk add --no-cache python3 make g++
+        COPY package*.json ./
+        RUN npm install -g truffle
+        RUN npm install
+        COPY . .
+    depends_on:
+      - ganache
+    volumes:
+      - ./:/app
+    command: ["sh", "-c", "./migrations.sh"]
+
+  frontend:
+    image: nginx:alpine
+    ports:
+     - 80:80
+    volumes:
+      - ./src:/usr/share/nginx/html
+      - ./build/contracts:/usr/share/nginx/html/contracts
+    depends_on:
+      - truffle-migrate

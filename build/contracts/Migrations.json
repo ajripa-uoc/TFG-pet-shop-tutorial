@@ -53,7 +53,7 @@
   "sourceMap": "66:352:1:-;;;113:10;90:33;;;;;;;;;;;;;;;;;;;;66:352;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:352:1;;;;;;;",
   "deployedSourceMap": "66:352:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:352:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;127:36;;;:::i;:::-;;;;;;;;;;;;;;;;;;;90:33;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;313:103;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;313:103:1;;;;;;;;;;;;;;;;;:::i;:::-;;127:36;;;;:::o;90:33::-;;;;;;;;;;;;;:::o;313:103::-;225:5;;;;;;;;;;;211:19;;:10;:19;;;196:101;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;402:9;375:24;:36;;;;313:103;:::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.8.0;\n\ncontract Migrations {\n  address public owner = msg.sender;\n  uint public last_completed_migration;\n\n  modifier restricted() {\n    require(\n      msg.sender == owner,\n      \"This function is restricted to the contract's owner\"\n    );\n    _;\n  }\n\n  function setCompleted(uint completed) public restricted {\n    last_completed_migration = completed;\n  }\n}\n",
-  "sourcePath": "/Users/ajripa/Library/CloudStorage/OneDrive-UniversitatObertadeCatalunya/TFG/Repos/TFG-truffle-pet-shop/contracts/Migrations.sol",
+  "sourcePath": "/app/contracts/Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -912,27 +912,51 @@
     "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
   },
   "networks": {
-    "5777": {
+    "1731755468716": {
       "events": {},
       "links": {},
-      "address": "0xcFa9a0c0A2baFB63C6D28685e55A9D1Dd6e2aCf2",
-      "transactionHash": "0x76fe759c417b14cc425f8d23a1884c769bc7ad3391608188b5688126570e1235"
+      "address": "0x3C62b627d5C2CA63FD2fFd9cFd597D7c773Ca659",
+      "transactionHash": "0x3c5ae97f1c4fa2a22f8ea3f70f951274ffce0ec0512ea6093b25bf3bd56713b2"
     },
-    "1731141191612": {
+    "1731756412665": {
       "events": {},
       "links": {},
-      "address": "0xdf89a44768b9dD60c868cA085a6d1aad3F04E011",
-      "transactionHash": "0xe4961d7946c0f6559d045d436e8979e1f4ea3e97a4d9d725a0b27d476e1f2aa3"
+      "address": "0x7690Db408e9fCEC30845A4bd8D1Ff56ED34e63Bc",
+      "transactionHash": "0x5b75c16817d72959835a5b15bb8894d0b1b6f1a77f02d3194b92c913bd461f44"
     },
-    "1731241540979": {
+    "1731757354827": {
       "events": {},
       "links": {},
-      "address": "0x7Ceaf5BD13a044B0919694ca0a50491BC693f751",
-      "transactionHash": "0xe9cf219b4ce8a0157670a1d8ec219ecce769b1d0b27782b30816bcc16bf66b9e"
+      "address": "0xC304C42Fd0Fe19e2A613983b562330B1e0159A84",
+      "transactionHash": "0xf31d7bdd52416829db65e739861b51ae9c0cd7848aef322e8d5298b57a488845"
+    },
+    "1731757580009": {
+      "events": {},
+      "links": {},
+      "address": "0x8592C1E38Dccf72D51A309B103780f8Ad06E2852",
+      "transactionHash": "0x5e3d094528b2085def3d028fad6fbf46b6d0ed742f11ca4a6acd416dc243c7a5"
+    },
+    "1731757757678": {
+      "events": {},
+      "links": {},
+      "address": "0x4232900d5E3d18dcda562cEB41764975e82EEc47",
+      "transactionHash": "0x05a20f959999e933f5fa645bcb8ac084547131481568d7594f57e99acd6d8ece"
+    },
+    "1731758555907": {
+      "events": {},
+      "links": {},
+      "address": "0xEf9B10C12A2234655B3A0928195118A288A1709b",
+      "transactionHash": "0x7aae9edb0a6ae6bc8b6f3de0b00b88277f1538a95410ce0805aaadaa1f9f0e08"
+    },
+    "1731758584560": {
+      "events": {},
+      "links": {},
+      "address": "0xd9Cb832BB5eE9D7e84E564bcDb8E7e2624391330",
+      "transactionHash": "0xaa5bd73a353666e52c6a1efee42a395297d18138bd533467e97da9c796852308"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-11-10T16:47:33.941Z",
+  "updatedAt": "2024-11-16T12:03:09.279Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
