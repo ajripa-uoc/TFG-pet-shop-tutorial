@@ -36,7 +36,7 @@ jobs:
         run: |
           truffle compile
           truffle migrate --network live
-          truffle test
+          truffle test --network live
         env:
           LIVE_URL: ${{ inputs.network_url }}
 
