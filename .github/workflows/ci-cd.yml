@@ -6,6 +6,12 @@ on:
   #pull_request:
   #  branches: [ "main" ]
   workflow_dispatch:
+    inputs:
+      network_url:
+        description: 'Network URL for contract deployment'
+        required: true
+        type: string
+        default: 'https://ganache.ajripa.click'
 
 jobs:
   deploy-contracts:
@@ -31,6 +37,8 @@ jobs:
           truffle compile
           truffle migrate --network live
           truffle test
+        env:
+          LIVE_URL: ${{ inputs.network_url }}
 
       - name: Upload contract artifacts
         uses: actions/upload-artifact@v4
@@ -120,11 +128,16 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
-        - name: Update image tag in values-tfg.yaml
+        - name: Update values-tfg.yaml
           run: |
             cd chart
+            # Update image tag
             sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
-            cat values.yaml
+            # Update live_url
+            sed -i "s|LIVE_URL: .*|LIVE_URL: ${{ needs.deploy-contracts.outputs.LIVE_URL }}|g" values-tfg.yaml
+
+            # Verify changes
+            cat values-tfg.yaml
 
         - name: Commit and push changes
           run: |

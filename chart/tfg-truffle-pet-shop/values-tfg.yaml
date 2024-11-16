@@ -24,5 +24,5 @@ ingress:
         - path: /*
           pathType: ImplementationSpecific
 
-env:
-  GANACHE_URL: https://ganache.ajripa.click
+config:
+  LIVE_URL: https://ganache.ajripa.click
