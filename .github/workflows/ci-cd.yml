@@ -130,6 +130,6 @@ jobs:
           run: |
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
-            git add chart/values.yaml
+            git add chart/values-tfg.yaml
             git commit -m "chore: update image tag to ${{ needs.build-and-push.outputs.image_tag }}"
             git push
