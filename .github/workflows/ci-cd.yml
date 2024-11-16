@@ -60,7 +60,8 @@ jobs:
     needs: deploy-contracts
     outputs:
       image_tag: ${{ env.IMAGE_TAG }}
-      repo_name: ${{ env.REPO_NAME }}
+      full_image: ${{ env.FULL_IMAGE }}
+
 
     steps:
       - name: Checkout
@@ -122,8 +123,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG
           echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$REPO_NAME"
-          echo "image_tag=$IMAGE_TAG"
-          echo "full_image=$ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG"
+          echo "FULL_IMAGE=$ECR_REGISTRY/$REPO_NAME" >> $GITHUB_ENV
 
   update-helm-chart:
       name: Update Helm Chart
@@ -140,7 +140,7 @@ jobs:
           run: |
             cd chart/${{ inputs.helm_chart_name }}
             # Update image repository
-            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.repo_name }}|g" values-tfg.yaml
+            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.full_image }}|g" values-tfg.yaml
             # Update image tag
             sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
             # Update live url
