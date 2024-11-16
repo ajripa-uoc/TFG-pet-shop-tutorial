@@ -153,6 +153,15 @@ jobs:
           id: login-ecr
           uses: aws-actions/amazon-ecr-login@v2
 
+        - name: Get ArgoCD credentials from AWS Secrets Manager
+          id: get-token
+          run: |
+            SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id argocd/credentials --query 'SecretString' --output text)
+            ARGOCD_TOKEN=$(echo $SECRET_VALUE | jq -r .token)
+            ARGOCD_SERVER=$(echo $SECRET_VALUE | jq -r .server)
+            echo "argocd_token=$ARGOCD_TOKEN" >> $GITHUB_OUTPUT
+            echo "argocd_server=$ARGOCD_SERVER" >> $GITHUB_OUTPUT
+
         - name: Update values-tfg.yaml
           env:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -174,7 +183,7 @@ jobs:
 
         - name: Commit and push changes
           env:
-            COMMIT_MESSAGE: "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
+            COMMIT_MESSAGE: "gitops: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
             CHART_NAME: ${{ inputs.helm_chart_name }}
           run: |
             git config --global user.name 'GitHub Actions'
@@ -182,3 +191,16 @@ jobs:
             git add chart/$CHART_NAME/values-tfg.yaml
             git commit -m "$COMMIT_MESSAGE"
             git push
+
+        - name: Sync ArgoCD application
+          env:
+            ARGOCD_TOKEN: ${{ steps.get-token.outputs.argocd_token }}
+            ARGOCD_SERVER: ${{ steps.get-token.outputs.argocd_server }}
+            CHART_NAME: ${{ inputs.helm_chart_name }}
+          run: |
+            set -eux
+            # Sync app
+              argocd app get --refresh $CHART_NAME --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
+
+            # Wait for app
+            argocd app wait $CHART_NAME --sync --health --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
