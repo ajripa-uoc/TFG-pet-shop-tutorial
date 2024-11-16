@@ -1,7 +1,7 @@
 # Values file for the tfg-truffle-pet-shop chart
 image:
-  repository: ajripa-uoc_tfg-truffle-pet-shop
-  tag: 2024-11-16-15-48
+  repository: 
+  tag: 2024-11-16-16-01
 
 service:
   port: 3000
