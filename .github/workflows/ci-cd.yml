@@ -17,6 +17,11 @@ on:
         required: true
         type: string
         default: 'tfg-truffle-pet-shop'
+      force_argocd_sync:
+        description: 'Force ArgoCD sync'
+        required: true
+        type: boolean
+        default: true
 jobs:
   deploy-contracts:
     name: Deploy Contracts
@@ -153,15 +158,6 @@ jobs:
           id: login-ecr
           uses: aws-actions/amazon-ecr-login@v2
 
-        - name: Get ArgoCD credentials from AWS Secrets Manager
-          id: get-token
-          run: |
-            SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id argocd/credentials --query 'SecretString' --output text)
-            ARGOCD_TOKEN=$(echo $SECRET_VALUE | jq -r .token)
-            ARGOCD_SERVER=$(echo $SECRET_VALUE | jq -r .server)
-            echo "argocd_token=$ARGOCD_TOKEN" >> $GITHUB_OUTPUT
-            echo "argocd_server=$ARGOCD_SERVER" >> $GITHUB_OUTPUT
-
         - name: Update values-tfg.yaml
           env:
             ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -192,15 +188,50 @@ jobs:
             git commit -m "$COMMIT_MESSAGE"
             git push
 
-        - name: Sync ArgoCD application
-          env:
-            ARGOCD_TOKEN: ${{ steps.get-token.outputs.argocd_token }}
-            ARGOCD_SERVER: ${{ steps.get-token.outputs.argocd_server }}
-            CHART_NAME: ${{ inputs.helm_chart_name }}
-          run: |
-            set -eux
-            # Sync app
-              argocd app get --refresh $CHART_NAME --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
+  sync-argocd:
+    name: Sync ArgoCD Application
+    needs: update-helm-chart
+    runs-on: ubuntu-latest
+    if: inputs.force_argocd_sync == true
 
-            # Wait for app
-            argocd app wait $CHART_NAME --sync --health --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Get ArgoCD credentials from AWS Secrets Manager
+        id: get-token
+        run: |
+          SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id argocd/credentials --query 'SecretString' --output text)
+          ARGOCD_TOKEN=$(echo $SECRET_VALUE | jq -r .token)
+          ARGOCD_SERVER=$(echo $SECRET_VALUE | jq -r .server)
+          echo "argocd_token=$ARGOCD_TOKEN" >> $GITHUB_OUTPUT
+          echo "argocd_server=$ARGOCD_SERVER" >> $GITHUB_OUTPUT
+
+
+      - name: Install ArgoCD CLI
+        run: |
+          set -eux
+          curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+          sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+          rm argocd-linux-amd64
+          argocd version --client
+
+      - name: Sync ArgoCD application
+        env:
+          ARGOCD_TOKEN: ${{ steps.get-token.outputs.argocd_token }}
+          ARGOCD_SERVER: ${{ steps.get-token.outputs.argocd_server }}
+          CHART_NAME: ${{ inputs.helm_chart_name }}
+        run: |
+          set -eux
+          # Sync app
+            argocd app get --refresh $CHART_NAME --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
+
+          # Wait for app
+          argocd app wait $CHART_NAME --sync --health --auth-token $ARGOCD_TOKEN --server $ARGOCD_SERVER --grpc-web
+
+
+
