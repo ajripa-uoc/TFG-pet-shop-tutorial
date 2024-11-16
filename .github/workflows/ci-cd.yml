@@ -60,7 +60,7 @@ jobs:
     needs: deploy-contracts
     outputs:
       image_tag: ${{ env.IMAGE_TAG }}
-      full_image: ${{ env.FULL_IMAGE }}
+      full_image: ${{ steps.build-push.outputs.full_image }}
 
 
     steps:
@@ -123,7 +123,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG
           echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$REPO_NAME"
-          echo "FULL_IMAGE=$ECR_REGISTRY/$REPO_NAME" >> $GITHUB_ENV
+          echo "FULL_IMAGE=$ECR_REGISTRY/$REPO_NAME" >> $GITHUB_OUTPUT
 
   update-helm-chart:
       name: Update Helm Chart
