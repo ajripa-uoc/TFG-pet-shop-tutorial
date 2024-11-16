@@ -8,7 +8,7 @@ module.exports = {
     },
     live: {
       url: process.env.LIVE_URL,
-      network_id: 1
+      network_id: "*"
     },
     develop: {
       port: 7545
