@@ -12,6 +12,11 @@ on:
         required: true
         type: string
         default: 'https://ganache.ajripa.click' # This services is deployed in our K8S cluster
+      helm_chart_name:
+        description: 'Helm chart name'
+        required: true
+        type: string
+        default: 'tfg-truffle-pet-shop'
 jobs:
   deploy-contracts:
     name: Deploy Contracts
@@ -130,7 +135,9 @@ jobs:
 
         - name: Update values-tfg.yaml
           run: |
-            cd chart/${{ needs.build-and-push.outputs.repo_name }}
+            cd chart/${{ inputs.helm_chart_name }}
+            # Update image repository
+            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.repo_name }}|g" values-tfg.yaml
             # Update image tag
             sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
             # Update live url
@@ -143,6 +150,6 @@ jobs:
           run: |
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
-            git add chart/${{ needs.build-and-push.outputs.repo_name }}/values-tfg.yaml
+            git add chart/${{ inputs.helm_chart_name }}/values-tfg.yaml
             git commit -m "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
             git push
