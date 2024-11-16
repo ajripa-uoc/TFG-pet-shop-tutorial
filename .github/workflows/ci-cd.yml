@@ -143,23 +143,43 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v4
 
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: eu-west-1
+
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@v2
+
         - name: Update values-tfg.yaml
+          env:
+            ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+            REPO_NAME: ${{ needs.build-and-push.outputs.repo_name }}
+            IMAGE_TAG: ${{ needs.build-and-push.outputs.image_tag }}
+            LIVE_URL: ${{ inputs.network_url }}
+            CHART_NAME: ${{ inputs.helm_chart_name }}
           run: |
-            cd chart/${{ inputs.helm_chart_name }}
+            cd chart/${CHART_NAME}
             # Update image repository
-            sed -i "s|repository: .*|repository: ${{ needs.build-and-push.outputs.registry }}/${{ needs.build-and-push.outputs.repo_name }}|g" values-tfg.yaml
+            sed -i "s|repository: .*|repository: $ECR_REGISTRY/$REPO_NAME|g" values-tfg.yaml
             # Update image tag
-            sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
+            sed -i "s|tag: .*|tag: $IMAGE_TAG|g" values-tfg.yaml
             # Update live url
-            sed -i "s|liveUrl: .*|liveUrl: ${{ inputs.network_url }}|g" values-tfg.yaml
+            sed -i "s|liveUrl: .*|liveUrl: $LIVE_URL|g" values-tfg.yaml
 
             # Verify changes
             cat values-tfg.yaml
 
         - name: Commit and push changes
+          env:
+            COMMIT_MESSAGE: "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
+            CHART_NAME: ${{ inputs.helm_chart_name }}
           run: |
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
-            git add chart/${{ inputs.helm_chart_name }}/values-tfg.yaml
-            git commit -m "chore: image tag ${{ needs.build-and-push.outputs.image_tag }} and network url ${{ inputs.network_url }}"
+            git add chart/$CHART_NAME/values-tfg.yaml
+            git commit -m "$COMMIT_MESSAGE"
             git push
