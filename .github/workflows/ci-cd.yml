@@ -133,8 +133,8 @@ jobs:
             cd chart
             # Update image tag
             sed -i "s|tag: .*|tag: ${{ needs.build-and-push.outputs.image_tag }}|g" values-tfg.yaml
-            # Update live_url
-            sed -i "s|LIVE_URL: .*|LIVE_URL: ${{ needs.deploy-contracts.outputs.LIVE_URL }}|g" values-tfg.yaml
+            # Update live url
+            sed -i "s|liveUrl: .*|liveUrl: ${{ needs.deploy-contracts.outputs.LIVE_URL }}|g" values-tfg.yaml
 
             # Verify changes
             cat values-tfg.yaml

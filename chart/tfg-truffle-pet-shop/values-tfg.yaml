@@ -35,4 +35,4 @@ volumeMounts:
     subPath: config.js
 
 config:
-  LIVE_URL: https://ganache.ajripa.click
+  liveUrl: https://ganache.ajripa.click
