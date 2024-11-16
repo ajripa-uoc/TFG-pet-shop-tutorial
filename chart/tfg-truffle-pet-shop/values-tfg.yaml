@@ -24,5 +24,15 @@ ingress:
         - path: /*
           pathType: ImplementationSpecific
 
+volumes:
+  - name: config-volume
+    configMap:
+      name: nginx-config
+
+volumeMounts:
+  - name: config-volume
+    mountPath: /usr/share/nginx/html/js/config.js
+    subPath: config.js
+
 config:
   LIVE_URL: https://ganache.ajripa.click
