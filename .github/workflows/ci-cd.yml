@@ -59,8 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-contracts
     outputs:
-      registry: ${{ steps.login-ecr.outputs.registry }}
-      repo_name: ${{ steps.build-push.outputs.full_image }}
+      repo_name: ${{ steps.prepare-ecr.outputs.repo_name }}
       image_tag: ${{ steps.tag-timestamp.outputs.image_tag }}
 
     steps:
