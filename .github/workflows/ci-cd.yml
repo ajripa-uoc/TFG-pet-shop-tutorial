@@ -207,10 +207,9 @@ jobs:
         run: |
           SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id argocd/credentials --query 'SecretString' --output text)
           ARGOCD_TOKEN=$(echo $SECRET_VALUE | jq -r .argocd_token)
-          ARGOCD_SERVER=$(echo $SECRET_VALUE | jq -r .argpcd_server)
+          ARGOCD_SERVER=$(echo $SECRET_VALUE | jq -r .argod_server)
           echo "argocd_token=$ARGOCD_TOKEN" >> $GITHUB_OUTPUT
           echo "argocd_server=$ARGOCD_SERVER" >> $GITHUB_OUTPUT
-
 
       - name: Install ArgoCD CLI
         run: |
