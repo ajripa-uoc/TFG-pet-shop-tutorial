@@ -36,4 +36,6 @@ volumeMounts:
 
 config:
   liveUrl: https://ganache.ajripa.click
-  migration: true
+
+migrations:
+  enabled: true

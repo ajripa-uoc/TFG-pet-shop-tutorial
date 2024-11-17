@@ -1,4 +1,4 @@
-name: Pet Shop CI/CD
+name: Pet Shop CI/CD without migrations
 
 on:
   #push:

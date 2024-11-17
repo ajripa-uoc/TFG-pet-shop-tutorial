@@ -1,4 +1,9 @@
 # templates/migration-job.yaml
+# Run this job during pre-install and pre-upgrade phases
+# This ensures blockchain state is ready before the application starts
+# Without this, the app might start before the contracts are deployed, causing errors
+
+{{- if .Values.migrations.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -28,6 +33,4 @@ spec:
 
               echo "Verifying deployment..."
               truffle test --network live
-          env:
-            - name: LIVE_URL
-              value: {{ .Values.config.liveUrl }}
+{{- end }}
