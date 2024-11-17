@@ -37,7 +37,5 @@ volumeMounts:
 config:
   liveUrl: https://ganache.ajripa.click
 
-migrations:
-  enabled: true
-  storage:
-    size: 1Gi
+shared-storage:
+  size: 1Gi

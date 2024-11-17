@@ -1,6 +1,5 @@
 # templates/pvc.yaml
 # This is a shared volume required for store contracts
-{{- if .Values.migrations.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -12,5 +11,4 @@ spec:
     - ReadWriteMany  # Required for multiple pods to access
   resources:
     requests:
-      storage: {{ .Values.migrations.storage.size | default "1Gi" }}
-{{- end }}
+      storage: {{ .Values.shared-storage.size }}

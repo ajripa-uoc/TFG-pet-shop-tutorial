@@ -2,8 +2,6 @@
 # Run this job during pre-install and pre-upgrade phases
 # This ensures blockchain state is ready before the application starts
 # Without this, the app might start before the contracts are deployed, causing errors
-
-{{- if .Values.migrations.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -43,4 +41,3 @@ spec:
         - name: contracts
           persistentVolumeClaim:
             claimName: shared-contracts
-{{- end }}
