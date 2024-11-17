@@ -53,7 +53,7 @@
   "sourceMap": "66:352:1:-;;;113:10;90:33;;;;;;;;;;;;;;;;;;;;66:352;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:352:1;;;;;;;",
   "deployedSourceMap": "66:352:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;66:352:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;127:36;;;:::i;:::-;;;;;;;;;;;;;;;;;;;90:33;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;313:103;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;313:103:1;;;;;;;;;;;;;;;;;:::i;:::-;;127:36;;;;:::o;90:33::-;;;;;;;;;;;;;:::o;313:103::-;225:5;;;;;;;;;;;211:19;;:10;:19;;;196:101;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;402:9;375:24;:36;;;;313:103;:::o",
   "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.22 <0.8.0;\n\ncontract Migrations {\n  address public owner = msg.sender;\n  uint public last_completed_migration;\n\n  modifier restricted() {\n    require(\n      msg.sender == owner,\n      \"This function is restricted to the contract's owner\"\n    );\n    _;\n  }\n\n  function setCompleted(uint completed) public restricted {\n    last_completed_migration = completed;\n  }\n}\n",
-  "sourcePath": "/Users/ajripa/Library/CloudStorage/OneDrive-UniversitatObertadeCatalunya/TFG/Repos/TFG-truffle-pet-shop/contracts/Migrations.sol",
+  "sourcePath": "/home/runner/work/TFG-truffle-pet-shop/TFG-truffle-pet-shop/contracts/Migrations.sol",
   "ast": {
     "absolutePath": "project:/contracts/Migrations.sol",
     "exportedSymbols": {
@@ -935,10 +935,17 @@
       "links": {},
       "address": "0xc2AF57d76549CF6DcB143EB56A237FE1c4E345A0",
       "transactionHash": "0x4aa213e2db3aacfb355bcf8ea3ff67b2a44ea2ff05b079c67f55fb06c577fbab"
+    },
+    "1731830515166": {
+      "events": {},
+      "links": {},
+      "address": "0xce362301aB5B613cDB2F90137c0f19810014ac1e",
+      "transactionHash": "0x5b23e4a7a131ddacb1ac99c9d765bc80663014fc5dea5da0319f46004249e9d1"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-11-17T18:55:20.216Z",
+  "updatedAt": "2024-11-17T21:33:11.399Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },
