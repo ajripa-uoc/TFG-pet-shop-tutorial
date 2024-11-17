@@ -33,4 +33,7 @@ spec:
 
               echo "Verifying deployment..."
               truffle test --network live
+          env:
+            - name: LIVE_URL
+              value: {{ .Values.config.liveUrl }}
 {{- end }}
