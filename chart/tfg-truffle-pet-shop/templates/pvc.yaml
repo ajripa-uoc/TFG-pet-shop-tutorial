@@ -9,6 +9,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce  # Required for multiple pods to access
+  storageClassName: {{ .Values.storage.storageClassName }}
   resources:
     requests:
       storage: {{ .Values.storage.size }}
