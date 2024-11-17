@@ -6,6 +6,8 @@ metadata:
   name: shared-contracts
   labels:
     {{- include "tfg-truffle-pet-shop.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install
 spec:
   accessModes:
     - ReadWriteOnce  # Required for multiple pods to access
