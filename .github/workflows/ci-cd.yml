@@ -62,18 +62,14 @@ jobs:
             build/contracts/
           retention-days: 1
 
-      - name: Commit and push changes
+      - name: Commit  changes
         env:
           COMMIT_MESSAGE: "gitops: contracts updated"
-          CHART_NAME: ${{ inputs.helm_chart_name }}
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
-          git fecth
-          git pull
           git add build/contracts/
           git commit -m "$COMMIT_MESSAGE"
-          git push
 
   build-and-push:
     name: Build and Push Docker Image
