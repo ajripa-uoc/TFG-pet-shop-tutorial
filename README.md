@@ -37,7 +37,6 @@ The project uses Docker Compose to orchestrate the setup, with the following ser
 docker-compose up --build -d
 ```
 
-
 ### Accessing the Application
 
 After starting the services, you can access the DApp in your web browser at:
