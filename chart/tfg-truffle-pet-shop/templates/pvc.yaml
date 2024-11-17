@@ -12,3 +12,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.size }}
+  storageClassName: gp2
