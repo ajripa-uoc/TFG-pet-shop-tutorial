@@ -8,6 +8,8 @@ metadata:
     {{- include "tfg-truffle-pet-shop.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   accessModes:
     - ReadWriteMany  # Required for multiple pods to access
