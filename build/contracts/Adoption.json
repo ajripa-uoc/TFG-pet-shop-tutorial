@@ -1261,10 +1261,17 @@
       "links": {},
       "address": "0xFf9Ae6310Ae4A345AC7aea6997eF18Ab0DCe37d1",
       "transactionHash": "0x0ac4976a9dea2761b101f42fdaec49e379d544b9c622eb70e59d3f76e154421f"
+    },
+    "1731846182978": {
+      "events": {},
+      "links": {},
+      "address": "0x2bDbf44e44DeB7c191438Dc4582Ca8dF3d58E526",
+      "transactionHash": "0x66aba6eccc7cfdb3375ff1e68ae10ad5585ffc9e696b89536dc606b15520b815"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-11-17T12:07:12.834Z",
+  "updatedAt": "2024-11-17T12:23:08.470Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },
