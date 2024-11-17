@@ -24,16 +24,5 @@ ingress:
         - path: /*
           pathType: ImplementationSpecific
 
-# volumeMounts:
-#   - name: contracts
-#     mountPath: /build/contracts
-# volumes:
-#   - name: contracts
-#     persistentVolumeClaim:
-#       claimName: tfg-truffle-pet-shop-pvc
-
 env:
   LIVE_URL: https://ganache.ajripa.click
-
-storage:
-  size: 1Gi
