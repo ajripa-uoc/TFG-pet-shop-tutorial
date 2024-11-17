@@ -40,4 +40,4 @@ spec:
       volumes:
         - name: contracts
           persistentVolumeClaim:
-            claimName: shared-contracts
+            claimName: {{include "tfg-truffle-pet-shop.fullname" . }}-pvc

@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: shared-contracts
+  name: {{include "tfg-truffle-pet-shop.fullname" . }}-pvc
   labels:
     {{- include "tfg-truffle-pet-shop.labels" . | nindent 4 }}
   annotations:

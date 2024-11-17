@@ -24,16 +24,6 @@ ingress:
         - path: /*
           pathType: ImplementationSpecific
 
-volumes:
-  - name: config-volume
-    configMap:
-      name: webapp-config
-
-volumeMounts:
-  - name: config-volume
-    mountPath: /app/src/js/config.js
-    subPath: config.js
-
 config:
   liveUrl: https://ganache.ajripa.click
 
