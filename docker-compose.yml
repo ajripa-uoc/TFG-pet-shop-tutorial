@@ -22,11 +22,12 @@ services:
     command: ["sh", "-c", "./migrations.sh"]
 
   frontend:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-     - 80:80
-    volumes:
-      - ./src:/usr/share/nginx/html
-      - ./build/contracts:/usr/share/nginx/html/contracts
+     - 3000:3000
     depends_on:
       - truffle-migrate
+    volumes:
+      - ./build/:/app/build

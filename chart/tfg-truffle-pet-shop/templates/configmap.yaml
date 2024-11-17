@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-config
+  name: webapp-config
 data:
   config.js: |
     window.LIVE_URL = "{{ .Values.config.liveUrl }}";
