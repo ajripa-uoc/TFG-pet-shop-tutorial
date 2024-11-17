@@ -36,4 +36,7 @@ spec:
           env:
             - name: LIVE_URL
               value: {{ .Values.config.liveUrl }}
+          volumeMounts:
+            - name: contracts
+              mountPath: /build/contracts
 {{- end }}
