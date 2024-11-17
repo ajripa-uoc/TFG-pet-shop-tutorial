@@ -143,7 +143,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ github.sha }}
+          key: ${{ runner.os }}-docker-${{ steps.prepare-ecr.outputs.repo_name }}
           restore-keys: |
             ${{ runner.os }}-docker-
 
