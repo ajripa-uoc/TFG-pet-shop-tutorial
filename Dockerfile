@@ -28,4 +28,5 @@ COPY . .
 EXPOSE 3000
 
 # Start lite-server
-CMD ["npm", "run", "dev"]
+RUN chmod +x entrypoint.sh
+ENTRYPOINT [ "./entrypoint.sh" ]
