@@ -20,4 +20,5 @@ echo "Running tests..."
 truffle test || { echo "Truffle test failed"; exit 1; }
 
 # Run the app
+env
 npm run dev
