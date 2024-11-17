@@ -69,9 +69,10 @@ jobs:
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
+          git fecth
+          git pull
           git add build/contracts/
           git commit -m "$COMMIT_MESSAGE"
-          git pull
           git push
 
   build-and-push:
@@ -215,8 +216,9 @@ jobs:
             git config --global user.name 'GitHub Actions'
             git config --global user.email 'github-actions@github.com'
             git add chart/$CHART_NAME/values-tfg.yaml
-            git commit -m "$COMMIT_MESSAGE"
+            git fecth
             git pull
+            git commit -m "$COMMIT_MESSAGE"
             git push
 
   sync-argocd:
