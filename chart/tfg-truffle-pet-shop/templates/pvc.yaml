@@ -11,4 +11,4 @@ spec:
     - ReadWriteMany  # Required for multiple pods to access
   resources:
     requests:
-      storage: {{ .Values.shared-storage.size }}
+      storage: {{ .Values.storage.size }}

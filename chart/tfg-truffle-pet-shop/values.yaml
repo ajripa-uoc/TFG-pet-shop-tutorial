@@ -97,5 +97,5 @@ tolerations: []
 
 affinity: {}
 
-shared-storage:
+storage:
   size: 1Gi

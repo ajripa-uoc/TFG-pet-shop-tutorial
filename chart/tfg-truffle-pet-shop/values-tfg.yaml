@@ -37,5 +37,5 @@ volumeMounts:
 config:
   liveUrl: https://ganache.ajripa.click
 
-shared-storage:
+storage:
   size: 1Gi
