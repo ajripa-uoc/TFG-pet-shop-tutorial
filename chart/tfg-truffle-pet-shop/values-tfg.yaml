@@ -39,3 +39,5 @@ config:
 
 migrations:
   enabled: true
+  storage:
+    size: 1Gi

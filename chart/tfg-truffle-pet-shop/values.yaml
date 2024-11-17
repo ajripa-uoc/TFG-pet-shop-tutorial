@@ -99,3 +99,5 @@ affinity: {}
 
 migrations:
   enabled: false
+  storage:
+    size: 1Gi

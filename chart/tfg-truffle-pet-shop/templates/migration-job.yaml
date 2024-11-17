@@ -39,4 +39,8 @@ spec:
           volumeMounts:
             - name: contracts
               mountPath: /build/contracts
+      volumes:
+        - name: contracts
+          persistentVolumeClaim:
+            claimName: shared-contracts
 {{- end }}
