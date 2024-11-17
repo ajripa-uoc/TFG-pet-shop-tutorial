@@ -125,6 +125,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Restore Docker layer cache
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-docker-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
+
       - name: Build, tag, and push Docker image to Amazon ECR
         id: build-push
         shell: bash
@@ -134,9 +145,12 @@ jobs:
           REPO_NAME: ${{ steps.prepare-ecr.outputs.repo_name }}
           NETWORK_URL: ${{ inputs.network_url }}
         run: |
-          docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG . --build-arg NETWORK_URL=$NETWORK_URL
-          docker push $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG
-          echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$REPO_NAME"
+          docker buildx build \
+            --cache-from=type=local,src=/tmp/.buildx-cache \
+            --cache-to=type=local,dest=/tmp/.buildx-cache \
+            -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG \
+            . --build-arg NETWORK_URL=$NETWORK_URL \
+            --push
 
   update-helm-chart:
       name: Update Helm Chart
