@@ -31,7 +31,9 @@ RUN apk del .build-deps
 COPY . .
 
 # Update config.js with environment variables
-RUN sed -i "s|NETWORK_URL=.*|NETWORK_URL='$NETWORK_URL'|g" src/js/config.js
+RUN sed -i "s|NETWORK_URL =.*|NETWORK_URL = \"$NETWORK_URL\"|g" /app/src/js/config.js
+RUN cat /app/src/js/config.js
+
 
 # Expose port 3000
 EXPOSE 3000
