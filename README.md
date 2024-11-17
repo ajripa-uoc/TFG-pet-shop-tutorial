@@ -28,26 +28,15 @@ cd TFG-truffle-pet-shop
 
 The project uses Docker Compose to orchestrate the setup, with the following services:
 
-- **web**: The frontend application. **Note**: `web` requires `ganache-cli` to be up and running for the build phase.
+- **frontend**: The frontend application.
 - **ganache-cli**: Provides a local Ethereum blockchain environment.
 
-### Step 1: Start `ganache-cli`
-
-Since the `web` service depends on `ganache-cli` to be running during the build phase, you need to start `ganache-cli` first:
+### Start
 
 ```bash
-docker-compose up -d ganache-cli
+docker-compose up --build -d
 ```
 
-### Step 2: Build and Start `web`
-
-Once `ganache-cli` is running, build and start `web`:
-
-```bash
-docker-compose up --build web
-```
-
-This will bring up the `web` service along with any other dependencies defined in the `docker-compose.yml`.
 
 ### Accessing the Application
 
@@ -56,26 +45,3 @@ After starting the services, you can access the DApp in your web browser at:
 ```
 http://localhost:3000
 ```
-
-## Development and Testing
-
-### Running Tests
-
-To test the smart contracts, you can run:
-
-```bash
-truffle test
-```
-
-### Interacting with the Smart Contracts
-
-After deploying the contracts with `truffle migrate`, you can interact with them using the Truffle console:
-
-```bash
-truffle console
-```
-
-## Troubleshooting
-
-- **Connection Issues**: If `web` can’t connect to `ganache-cli`, make sure `ganache-cli` is running, and restart `web`.
-- **Environment Variables**: Ensure `GANACHE_URL` is set to the correct URL.

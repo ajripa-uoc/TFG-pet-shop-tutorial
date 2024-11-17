@@ -4,24 +4,14 @@ services:
     ports:
       - 8545:8545
 
-  truffle-migrate:
-    build:
-      context: .
-      dockerfile: Dockerfile.local
-    depends_on:
-      - ganache
-    volumes:
-      - ./:/app
-    command: ["sh", "-c", "./migrations.sh"]
-
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.local
+      dockerfile: Dockerfile
     ports:
      - 3000:3000
+     - 3001:3001
     depends_on:
-      - truffle-migrate
-    volumes:
-      - ./build/:/app/build
-    command: ["npm", "run", "dev"]
+      - ganache
+    environment:
+      - ENV=development
