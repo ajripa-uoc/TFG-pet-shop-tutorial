@@ -78,8 +78,6 @@ jobs:
           name: dapp-files
           path: .
 
-
-
       - name: Verify downloaded files
         run: |
           ls -la src/
@@ -134,8 +132,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.tag-timestamp.outputs.image_tag }}
           REPO_NAME: ${{ steps.prepare-ecr.outputs.repo_name }}
+          NETWORK_URL: ${{ inputs.network_url }}
         run: |
-          docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG .
+          docker build -t $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG . --build-arg NETWORK_URL=$NETWORK_URL
           docker push $ECR_REGISTRY/$REPO_NAME:$IMAGE_TAG
           echo "IMAGE $IMAGE_TAG is pushed to $ECR_REGISTRY/$REPO_NAME"
 

@@ -1,1 +1,1 @@
-window.LIVE_URL = process.env.LIVE_URL || "http://localhost:8545";
+window.NETWORK_URL = "http://localhost:8545";

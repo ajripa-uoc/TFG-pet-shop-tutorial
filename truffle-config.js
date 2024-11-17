@@ -7,7 +7,7 @@ module.exports = {
       network_id: "*" // Match any network id
     },
     live: {
-      url: process.env.LIVE_URL,
+      url: process.env.NETWORK_URL,
       network_id: "*"
     },
     develop: {
