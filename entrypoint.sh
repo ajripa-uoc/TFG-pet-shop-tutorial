@@ -9,6 +9,8 @@ set -e
 # Exit on any error
 set -e
 
+env
+
 # Truffle migrate
 echo "Compiling contracts..."
 truffle compile || { echo "Truffle compile failed"; exit 1; }
@@ -20,5 +22,4 @@ echo "Running tests..."
 truffle test || { echo "Truffle test failed"; exit 1; }
 
 # Run the app
-env
 npm run dev
