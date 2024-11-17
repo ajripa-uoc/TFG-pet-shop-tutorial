@@ -32,8 +32,8 @@ ingress:
 #     persistentVolumeClaim:
 #       claimName: tfg-truffle-pet-shop-pvc
 
-config:
-  liveUrl: https://ganache.ajripa.click
+env:
+  LIVE_URL: https://ganache.ajripa.click
 
 storage:
   size: 1Gi

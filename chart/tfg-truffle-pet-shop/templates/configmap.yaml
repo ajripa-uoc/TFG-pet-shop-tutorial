@@ -5,4 +5,4 @@ metadata:
   name: webapp-config
 data:
   config.js: |
-    window.LIVE_URL = "{{ .Values.config.liveUrl }}";
+    window.LIVE_URL = "{{ .Values.env.LIVE_URL }}";
