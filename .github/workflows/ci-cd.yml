@@ -44,9 +44,10 @@ jobs:
 
       - name: Run Truffle migrations
         run: |
+          set -eux
           truffle compile
-          truffle migrate --network live
           truffle test --network live
+          truffle migrate --network live
         env:
           LIVE_URL: ${{ inputs.network_url }}
 
@@ -76,6 +77,8 @@ jobs:
         with:
           name: dapp-files
           path: .
+
+
 
       - name: Verify downloaded files
         run: |
