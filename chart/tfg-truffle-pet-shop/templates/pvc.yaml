@@ -10,7 +10,7 @@ metadata:
     "helm.sh/hook": pre-install
 spec:
   accessModes:
-    - ReadWriteOnce  # Required for multiple pods to access
+    - ReadWriteMany  # Required for multiple pods to access
   storageClassName: {{ .Values.storage.storageClassName }}
   resources:
     requests:
