@@ -1,0 +1,16 @@
+# templates/pvc.yaml
+# This is a shared volume required for store contracts
+{{- if .Values.migrations.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-contracts
+  labels:
+    {{- include "tfg-truffle-pet-shop.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany  # Required for multiple pods to access
+  resources:
+    requests:
+      storage: {{ .Values.migrations.storage.size | default "1Gi" }}
+{{- end }}
