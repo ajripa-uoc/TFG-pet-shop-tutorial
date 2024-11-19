@@ -62,15 +62,6 @@ jobs:
             build/contracts/
           retention-days: 1
 
-      - name: Commit  changes
-        env:
-          COMMIT_MESSAGE: "gitops: contracts updated"
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'github-actions@github.com'
-          git add build/contracts/
-          git commit -m "$COMMIT_MESSAGE"
-
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
