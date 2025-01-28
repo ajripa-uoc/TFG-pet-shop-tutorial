@@ -1,7 +1,7 @@
 # Values file for the tfg-truffle-pet-shop chart
 image:
   repository: 986740191892.dkr.ecr.eu-west-1.amazonaws.com/tfg-truffle-pet-shop
-  tag: 2024-11-17-22-13
+  tag: 2025-01-28-10-54
 
 service:
   port: 3000
